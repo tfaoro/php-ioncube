@@ -33,16 +33,16 @@ action :install do
 
   ruby_block "determine php version" do
     block do
-      php_version_output = `php --version`
+      php_version_output = `/usr/local/zend/bin/php --version`
       php_version = php_version_output.match(/PHP ([0-9]+\.[0-9]+)\.[0-9]+/)[1]
       Chef::Log.info("detected PHP version #{php_version}")
-      ioncube_file_resource = run_context.resource_collection.find(:file => "#{run_context.node[:php][:ext_conf_dir]}/ioncube.ini")
+      ioncube_file_resource = run_context.resource_collection.find(:file => "#{run_context.node[:zendserver][:ext_conf_dir]}/ioncube.ini")
       ioncube_file_resource.content "; priority=00\nzend_extension=/usr/local/ioncube/ioncube_loader_lin_" + php_version + ".so\n"
     end
     only_if { run_context.node[:php_ioncube][:version] == '' }
   end
 
-  file "#{run_context.node[:php][:ext_conf_dir]}/ioncube.ini" do
+  file "#{run_context.node[:zendserver][:ext_conf_dir]}/ioncube.ini" do
     content "; priority=00\nzend_extension=/usr/local/ioncube/ioncube_loader_lin_" + run_context.node[:php_ioncube][:version] + ".so\n"  # dynamically defined during convergence in above ruby_block
     owner "root"
     group "root"
