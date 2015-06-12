@@ -1,6 +1,6 @@
 # php-ioncube cookbook
 
-Installs and configures Zend Ioncube extension
+Installs and configures Ioncube extension with Zend Server
 
 Works for Chef >= 11.0
 
